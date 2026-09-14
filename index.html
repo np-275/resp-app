@@ -3,72 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PICU/NICU Respiratory Support Assistant</title>
+<title>Resp Support Assistant</title>
 <style>
   :root{
-    --bg:#0f172a; --panel:#1e293b; --panel2:#273449; --accent:#38bdf8; --accent2:#22c55e;
-    --warn:#f59e0b; --danger:#ef4444; --text:#e2e8f0; --muted:#94a3b8; --border:#334155;
+    --bg:#ffffff; --panel:#f7f7f8; --panel2:#f0f0f2; --border:#d1d1d6;
+    --text:#111113; --muted:#8e8e93; --black:#000000; --red:#ff3b30; --redbg:#fff1f0;
   }
   *{box-sizing:border-box;}
-  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:var(--bg);color:var(--text);padding:0 0 40px;}
-  header{position:sticky;top:0;background:var(--panel);padding:12px 16px;display:flex;
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+    background:var(--bg);color:var(--text);padding:0 0 50px;}
+  header{position:sticky;top:0;background:#fff;padding:14px 16px;display:flex;
     justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);z-index:10;}
-  header h1{font-size:16px;margin:0;}
-  .icon-btn{background:none;border:1px solid var(--border);color:var(--text);border-radius:8px;
-    padding:6px 10px;font-size:13px;cursor:pointer;}
-  main{max-width:720px;margin:0 auto;padding:16px;}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:14px;}
-  .card h2{margin:0 0 10px;font-size:15px;color:var(--accent);}
+  header h1{font-size:17px;margin:0;font-weight:600;letter-spacing:-0.2px;}
+  .icon-btn{background:var(--panel2);border:none;color:var(--text);border-radius:20px;
+    padding:7px 12px;font-size:14px;cursor:pointer;}
+  main{max-width:680px;margin:0 auto;padding:16px;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;}
+  .card h2{margin:0 0 12px;font-size:15px;font-weight:600;color:var(--text);letter-spacing:-0.2px;}
   .row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
   .field{flex:1;min-width:120px;}
-  label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;}
-  input,select{width:100%;padding:9px;border-radius:8px;border:1px solid var(--border);
-    background:var(--panel2);color:var(--text);font-size:14px;}
-  button.primary{background:var(--accent);color:#001;border:none;border-radius:10px;padding:12px 16px;
-    font-size:14px;font-weight:600;cursor:pointer;width:100%;}
-  button.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--border);
-    border-radius:10px;padding:12px 16px;font-size:14px;cursor:pointer;width:100%;}
-  button.warn{background:var(--warn);color:#001;border:none;border-radius:10px;padding:12px 16px;
-    font-weight:600;cursor:pointer;width:100%;}
-  button.danger{background:var(--danger);color:#fff;border:none;border-radius:10px;padding:10px 14px;
-    cursor:pointer;}
-  button.good{background:var(--accent2);color:#001;border:none;border-radius:10px;padding:12px 16px;
-    font-weight:600;cursor:pointer;width:100%;}
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:500;}
+  input,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);
+    background:#fff;color:var(--text);font-size:15px;-webkit-appearance:none;}
+  input.escalated{border:1.5px solid var(--red);background:var(--redbg);}
+  button{font-family:inherit;}
+  button.primary{background:var(--black);color:#fff;border:none;border-radius:12px;padding:13px 16px;
+    font-size:15px;font-weight:600;cursor:pointer;width:100%;letter-spacing:-0.1px;}
+  button.secondary{background:#fff;color:var(--text);border:1.5px solid var(--border);
+    border-radius:12px;padding:13px 16px;font-size:15px;font-weight:600;cursor:pointer;width:100%;}
+  button.danger{background:var(--red);color:#fff;border:none;border-radius:12px;padding:13px 16px;
+    font-weight:600;cursor:pointer;width:100%;font-size:15px;}
+  button.ghost{background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:6px 10px;}
+  button:disabled{opacity:0.35;cursor:not-allowed;}
   .btnrow{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;}
-  .btnrow > *{flex:1;min-width:140px;}
-  .pill{display:inline-block;background:var(--panel2);border:1px solid var(--border);border-radius:999px;
-    padding:3px 10px;font-size:12px;color:var(--muted);margin-right:6px;}
-  .paramtable{width:100%;border-collapse:collapse;margin-top:8px;}
-  .paramtable td,.paramtable th{padding:6px 8px;border-bottom:1px solid var(--border);font-size:13px;}
-  .paramtable th{color:var(--muted);text-align:left;font-weight:500;}
-  .tip{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;
-    border-radius:50%;border:1px solid var(--muted);color:var(--muted);font-size:11px;cursor:help;
-    margin-left:6px;}
+  .btnrow > *{flex:1;min-width:130px;}
+  .pill{display:inline-block;background:var(--panel2);border-radius:999px;
+    padding:3px 10px;font-size:12px;color:var(--muted);margin-left:8px;font-weight:500;}
+  .paramtable{width:100%;border-collapse:collapse;margin-top:4px;}
+  .paramtable td,.paramtable th{padding:8px 4px;border-bottom:1px solid var(--border);font-size:14px;}
+  .paramtable th{color:var(--muted);text-align:left;font-weight:500;width:40%;}
+  .paramtable tr:last-child td, .paramtable tr:last-child th{border-bottom:none;}
   .hidden{display:none !important;}
-  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;
     justify-content:center;z-index:100;padding:16px;}
-  .modal{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;
-    max-width:480px;width:100%;max-height:90vh;overflow-y:auto;}
-  .patient-item{display:flex;justify-content:space-between;align-items:center;background:var(--panel2);
-    border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;border:1px solid transparent;}
-  .patient-item.active{border-color:var(--accent);}
-  .checklist label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);
-    margin-bottom:6px;cursor:pointer;}
+  .modal{background:#fff;border-radius:18px;padding:20px;max-width:460px;width:100%;
+    max-height:88vh;overflow-y:auto;}
+  .patient-item{display:flex;justify-content:space-between;align-items:center;background:var(--panel);
+    border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;}
+  .patient-item.active{border-color:var(--black);}
+  .checklist label{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text);
+    margin-bottom:8px;cursor:pointer;}
   .checklist input{width:auto;}
-  .badge-max{background:var(--danger);color:#fff;padding:2px 8px;border-radius:999px;font-size:11px;}
-  .small{font-size:12px;color:var(--muted);}
-  .disc{font-size:11px;color:var(--muted);text-align:center;margin-top:20px;line-height:1.5;}
-  a.gref{color:var(--accent);text-decoration:none;font-size:11px;}
+  .small{font-size:12.5px;color:var(--muted);line-height:1.5;}
+  .disc{font-size:11px;color:var(--muted);text-align:center;margin-top:24px;line-height:1.5;padding:0 20px;}
+
+  /* iOS-style disclosure group */
+  details.group{border:1px solid var(--border);border-radius:12px;margin-top:10px;overflow:hidden;background:#fff;}
+  details.group summary{list-style:none;cursor:pointer;padding:13px 14px;font-size:14.5px;font-weight:600;
+    display:flex;justify-content:space-between;align-items:center;}
+  details.group summary::-webkit-details-marker{display:none;}
+  details.group summary::after{content:"›";transform:rotate(90deg);color:var(--muted);font-size:18px;transition:.15s;}
+  details.group[open] summary::after{transform:rotate(-90deg);}
+  details.group .body{padding:14px;border-top:1px solid var(--border);}
+  details.group.alert summary{background:var(--redbg);color:var(--red);}
+
+  .abg-entry{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;}
+  .abg-entry .row-line{display:flex;justify-content:space-between;font-size:14px;font-weight:600;}
+  .abg-detail{margin-top:8px;font-size:13px;color:var(--muted);display:none;}
+  .abg-entry.open .abg-detail{display:block;}
+
+  .banner{border:1.5px solid var(--black);border-radius:12px;padding:14px;margin-top:10px;background:#fff;}
+  .banner b{font-size:14.5px;}
 </style>
 </head>
 <body>
 
 <header>
-  <h1 id="appTitle">🫁 Resp Support Assistant</h1>
-  <div style="display:flex;gap:8px;">
-    <button class="icon-btn" id="settingsBtn">⚙️</button>
-  </div>
+  <h1 id="appTitle">Resp Support Assistant</h1>
+  <button class="icon-btn" id="settingsBtn">⚙︎ Settings</button>
 </header>
 
 <main>
@@ -99,7 +111,7 @@
     <div id="picuParams" class="hidden">
       <div class="row">
         <div class="field"><label id="t-weight">Težina (kg)</label><input type="number" id="p_weight" step="0.1"></div>
-        <div class="field"><label id="t-age">Dob</label><input type="number" id="p_age" step="0.1" placeholder="godine"></div>
+        <div class="field"><label id="t-age">Dob (godine)</label><input type="number" id="p_age" step="0.1"></div>
         <div class="field"><label id="t-height">Visina (cm) — opcionalno</label><input type="number" id="p_height"></div>
       </div>
     </div>
@@ -113,8 +125,8 @@
       </div>
     </div>
     <div class="btnrow">
-      <button class="good" id="startNIVBtn" data-mode="NIV">▶ <span id="t-startniv">Kreni s NIV</span></button>
-      <button class="warn" id="jumpVentBtn">⏭ <span id="t-jumpvent">Odmah na VENTILATION</span></button>
+      <button class="primary" id="startNIVBtn">▶ <span id="t-startniv">Kreni s NIV</span></button>
+      <button class="secondary" id="jumpVentBtn"><span id="t-jumpvent">VENTILATION</span></button>
     </div>
     <button class="secondary" style="margin-top:8px" id="backToUnit">← <span id="t-back2">Nazad</span></button>
   </section>
@@ -124,7 +136,7 @@
     <h2 id="t-nivtitle">Neinvazivna respiratorna potpora (NIV)</h2>
     <div class="row">
       <div class="field">
-        <label id="t-nivmode">Mod NIV-a (auto-predlog, možeš promijeniti)</label>
+        <label id="t-nivmode">Mod NIV-a</label>
         <select id="nivModeSelect">
           <option value="CPAP">CPAP</option>
           <option value="HFNC">HFNC</option>
@@ -133,50 +145,97 @@
       </div>
     </div>
     <table class="paramtable" id="nivParamTable"></table>
-    <div class="small" id="nivGuidelineNote" style="margin-top:6px"></div>
+    <div class="small" id="nivGuidelineNote" style="margin-top:8px"></div>
 
-    <details style="margin-top:10px">
-      <summary id="t-manualentry" style="cursor:pointer;color:var(--accent);font-size:13px;">Ručni unos trenutnih postavki</summary>
-      <div class="row" style="margin-top:8px" id="manualNivFields"></div>
-      <button class="secondary" id="applyManualNiv" style="margin-top:6px;">Primijeni</button>
+    <details class="group">
+      <summary id="t-manualentry">Ručni unos trenutnih postavki</summary>
+      <div class="body">
+        <div class="row" id="manualNivFields"></div>
+        <button class="secondary" id="applyManualNiv">Primijeni</button>
+      </div>
     </details>
 
     <div class="btnrow" style="margin-top:14px">
-      <button class="warn" id="stillDyspnoicBtn">😮‍💨 STILL DYSPNOIC</button>
-      <button class="good" id="eupnoicBtn">🙂 EUPNOIC (deeskalacija)</button>
+      <button class="primary" id="stillDyspnoicBtn">STILL DYSPNOIC</button>
+      <button class="secondary" id="eupnoicBtn">EUPNOIC</button>
     </div>
-    <div class="btnrow">
-      <button class="danger" id="considerVentBtn">⏭ CONSIDER VENTILATION</button>
+    <div class="btnrow" id="considerVentWrap">
+      <button class="danger" id="considerVentBtn">CONSIDER VENTILATION</button>
     </div>
     <button class="secondary" style="margin-top:8px" id="backToParams">← <span id="t-back3">Nazad</span></button>
   </section>
 
-  <!-- OTHER CAUSE MODAL trigger area handled via JS modal -->
-
   <!-- VENTILATION SCREEN -->
   <section id="screen-vent" class="card hidden">
     <h2 id="t-venttitle">CONSIDER VENTILATION</h2>
-    <table class="paramtable" id="ettTable"></table>
 
-    <h3 style="font-size:13px;color:var(--muted);margin-top:14px;" id="t-initsettings">Početne postavke ventilatora (lung-protective)</h3>
-    <table class="paramtable" id="ventParamTable"></table>
-    <div class="small">Reference: PEMVECC (ESPNIC) / ARDSNet-adaptirano <a class="gref" href="#" onclick="return false;">[web:7][web:3]</a></div>
-
-    <details style="margin-top:10px">
-      <summary style="cursor:pointer;color:var(--accent);font-size:13px;" id="t-manualvent">Ručna korekcija postavki</summary>
-      <div id="manualVentFields" style="margin-top:8px"></div>
-      <button class="secondary" id="applyManualVent" style="margin-top:6px;">Primijeni</button>
+    <details class="group" id="ettGroup">
+      <summary id="t-ettsummary">ETT veličina i dubina</summary>
+      <div class="body">
+        <div class="row">
+          <div class="field"><label>ID (mm)</label><input type="number" step="0.1" id="ettIdInput"></div>
+          <div class="field"><label id="t-depthlabel">Dubina oralno (cm)</label><input type="number" step="0.1" id="ettDepthInput"></div>
+        </div>
+        <p class="small" id="t-ettinfo">Izračunato jednom prilikom otvaranja — informativno, uredi po potrebi.</p>
+      </div>
     </details>
 
+    <h3 style="font-size:13px;color:var(--muted);margin:16px 0 4px;font-weight:600;" id="t-initsettings">Postavke ventilatora</h3>
+    <table class="paramtable" id="ventParamTable"></table>
+    <button class="secondary" id="saveVentBtn" style="margin-top:10px">Save</button>
+
     <div class="btnrow" style="margin-top:14px">
-      <button class="warn" id="openABGBtn">🩸 ABS</button>
-      <button class="good" id="addSurfactantBtn">💧 ADD SURFACTANT</button>
+      <button class="primary" id="escalationBtn">Eskalacija</button>
     </div>
-    <div id="extubationBanner" class="hidden" style="margin-top:10px;padding:10px;border-radius:10px;background:#14532d;border:1px solid #22c55e;">
-      <b id="t-erready">Zadovoljeni kriteriji za ekstubaciju (ERT)</b>
-      <button class="good" style="margin-top:8px" id="considerExtubBtn">CONSIDER EXTUBATION</button>
+
+    <details class="group" id="abgGroup" style="margin-top:14px">
+      <summary id="t-abgtitle">ABS</summary>
+      <div class="body">
+        <div class="row">
+          <div class="field">
+            <label id="t-abgtype">Tip uzorka</label>
+            <select id="abgType"><option value="arterial">Arterijski</option><option value="venous">Venski</option><option value="capillary">Kapilarni</option></select>
+          </div>
+          <div class="field"><label>pH</label><input type="number" step="0.01" id="abgPH"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>pO2</label><input type="number" step="0.1" id="abgPO2"></div>
+          <div class="field"><label>pCO2</label><input type="number" step="0.1" id="abgPCO2"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>BE</label><input type="number" step="0.1" id="abgBE"></div>
+          <div class="field"><label>HCO3</label><input type="number" step="0.1" id="abgHCO3"></div>
+        </div>
+        <button class="primary" id="applyABG">Izračunaj i predloži korekciju</button>
+        <div id="abgHistoryList" style="margin-top:12px"></div>
+      </div>
+    </details>
+
+    <details class="group alert hidden" id="surfGroup" style="margin-top:14px">
+      <summary id="t-surftitle">Surfaktant</summary>
+      <div class="body">
+        <div id="surfRecommendation" class="small" style="margin-bottom:10px"></div>
+        <div class="row">
+          <div class="field">
+            <label id="t-surfgiven">Već sam samostalno dao surfaktant?</label>
+            <select id="surfGivenSelect"><option value="no">Ne</option><option value="yes">Da</option></select>
+          </div>
+        </div>
+        <div id="surfTimeFields" class="hidden">
+          <div class="row">
+            <div class="field"><label id="t-surftime">Vrijeme doze (opcionalno)</label><input type="time" id="surfTime"></div>
+          </div>
+        </div>
+        <button class="secondary" id="saveSurf">Spremi</button>
+      </div>
+    </details>
+
+    <div id="extubationBanner" class="banner hidden">
+      <b id="t-erready">Minimalna respiratorna potpora — razmotri ekstubaciju</b>
+      <button class="primary" style="margin-top:10px" id="considerExtubBtn">CONSIDER EXTUBATION</button>
     </div>
-    <button class="secondary" style="margin-top:8px" id="backToNivFromVent">← NIV</button>
+
+    <button class="secondary" style="margin-top:10px" id="backToNivFromVent">← NIV</button>
   </section>
 
 </main>
@@ -205,59 +264,8 @@
     <h2 id="t-othercause">OTHER CAUSE — isključi reverzibilne uzroke (opcionalno)</h2>
     <div class="checklist" id="otherCauseList"></div>
     <div class="btnrow" style="margin-top:10px">
-      <button class="secondary" id="skipOtherCause" id="t-skip">Preskoči</button>
-      <button class="primary" id="confirmOtherCause">Nastavi eskalaciju</button>
-    </div>
-  </div>
-</div>
-
-<!-- ABG MODAL -->
-<div class="modal-bg hidden" id="abgModal">
-  <div class="modal">
-    <h2 id="t-abgtitle">Arterijska/venska/kapilarna ABS</h2>
-    <div class="row">
-      <div class="field">
-        <label id="t-abgtype">Tip uzorka</label>
-        <select id="abgType"><option value="arterial">Arterijski</option><option value="venous">Venski</option><option value="capillary">Kapilarni</option></select>
-      </div>
-      <div class="field"><label>pH</label><input type="number" step="0.01" id="abgPH"></div>
-    </div>
-    <div class="row">
-      <div class="field"><label>pO2 (kPa ili mmHg)</label><input type="number" step="0.1" id="abgPO2"></div>
-      <div class="field"><label>pCO2 (kPa ili mmHg)</label><input type="number" step="0.1" id="abgPCO2"></div>
-    </div>
-    <div class="row">
-      <div class="field"><label>BE</label><input type="number" step="0.1" id="abgBE"></div>
-      <div class="field"><label>HCO3</label><input type="number" step="0.1" id="abgHCO3"></div>
-    </div>
-    <div id="abgSuggestion" class="small" style="margin:10px 0;padding:10px;background:var(--panel2);border-radius:8px;"></div>
-    <div class="btnrow">
-      <button class="secondary" id="cancelABG">Odustani</button>
-      <button class="primary" id="applyABG">Izračunaj korekciju</button>
-    </div>
-  </div>
-</div>
-
-<!-- ADD SURFACTANT MODAL -->
-<div class="modal-bg hidden" id="surfModal">
-  <div class="modal">
-    <h2 id="t-surftitle">ADD SURFACTANT</h2>
-    <div id="surfRecommendation" class="small" style="margin-bottom:10px;padding:10px;background:var(--panel2);border-radius:8px;"></div>
-    <div class="row">
-      <div class="field">
-        <label id="t-surfgiven">Već sam samostalno dao surfaktant?</label>
-        <select id="surfGivenSelect"><option value="no">Ne</option><option value="yes">Da</option></select>
-      </div>
-    </div>
-    <div id="surfTimeFields" class="hidden">
-      <div class="row">
-        <div class="field"><label id="t-surftime">Vrijeme doze (opcionalno)</label><input type="time" id="surfTime"></div>
-      </div>
-      <p class="small" id="t-surfnote">Bez unosa vremena app neće moći podsjetiti na redosiranje — možeš dodati vrijeme kasnije u kartici pacijenta.</p>
-    </div>
-    <div class="btnrow">
-      <button class="secondary" id="cancelSurf">Zatvori</button>
-      <button class="primary" id="saveSurf">Spremi</button>
+      <button class="secondary" id="skipOtherCause">Preskoči</button>
+      <button class="primary" id="confirmOtherCause">Nastavi</button>
     </div>
   </div>
 </div>
@@ -267,7 +275,7 @@
   <div class="modal">
     <h2 id="t-extubtitle">CONSIDER EXTUBATION</h2>
     <div class="checklist" id="ertChecklist"></div>
-    <p class="small" id="t-erdisc">Ovo je informativni podsjetnik (Extubation Readiness Test) — ne blokira potvrdu.</p>
+    <p class="small" id="t-erdisc">Informativni podsjetnik (ERT) — ne blokira potvrdu.</p>
     <div class="btnrow">
       <button class="secondary" id="cancelExtub">Odustani</button>
       <button class="danger" id="confirmExtub">Potvrdi ekstubaciju</button>
@@ -280,7 +288,7 @@
   <div class="modal">
     <h2 id="t-therapytitle">Terapija oko ekstubacije</h2>
     <table class="paramtable" id="therapyTable"></table>
-    <p class="small" id="t-therapyrefs">Deksametazon: 0.5 mg/kg IV (max 10 mg), višekratna doza 12–24h prije ekstubacije q6h do 6 doza — dokazano manje nuspojava od jednokratne doze blizu ekstubacije [web:34][web:36]. L-epinefrin nebulizirano: jednaka efikasnost kao racemični, širre dostupan, isti profil nuspojava [web:31][web:32][web:33].</p>
+    <p class="small" style="margin-top:10px" id="t-therapyrefs">Deksametazon 0.5 mg/kg IV (max 10 mg), 1. doza 12–24h prije ekstubacije, q6h do 6 doza. L-epinefrin nebulizirano jednake efikasnosti kao racemični, širre dostupan.</p>
     <button class="primary" id="closeTherapy">OK, zabilježeno</button>
   </div>
 </div>
@@ -297,72 +305,63 @@ let STATE = {
   patients: JSON.parse(localStorage.getItem('patients') || '[]'),
   activePatientId: null,
 };
-
 function saveState(){
   localStorage.setItem('lang', STATE.lang);
   localStorage.setItem('units', STATE.units);
   localStorage.setItem('patients', JSON.stringify(STATE.patients));
 }
-
 function newPatient(name){
   return {
-    id: 'p_' + Date.now(),
-    name,
-    unit: null, // PICU or NICU
-    params: {},
-    nivMode: 'CPAP',
-    nivSettings: {},
-    nivStep: 0,
-    ventSettings: {},
-    ettSize: null, ettDepth: null,
+    id: 'p_' + Date.now(), name, unit: null, params: {},
+    nivMode: 'CPAP', nivSettings: {}, nivAtMax:false,
+    ventSettings: {}, ventBaseline: {}, ettSize: null, ettDepth: null,
     surfactant: {given:false, time:null},
-    abgHistory: [],
-    log: []
+    abgHistory: [], currentScreen: null
   };
 }
-
-function activePatient(){
-  return STATE.patients.find(p => p.id === STATE.activePatientId);
-}
+function activePatient(){ return STATE.patients.find(p => p.id === STATE.activePatientId); }
 
 /* ================= I18N ================= */
 const I18N = {
   hr: {
-    appTitle: "🫁 Resp Support Assistant", patients:"Pacijenti", newname:"Ime i prezime (ili fiktivno)",
+    appTitle:"Resp Support Assistant", patients:"Pacijenti", newname:"Ime i prezime (ili fiktivno)",
     addpatient:"Novi pacijent", selectunit:"Odaberi jedinicu", back:"Nazad", params:"Parametri pacijenta",
     weight:"Težina (kg)", age:"Dob (godine)", height:"Visina (cm) — opcionalno",
     ga:"Gestacijska dob (tj)", corrage:"Korigirana dob (tj) — informativno", nweight:"Težina (g)",
-    startniv:"Kreni s NIV", jumpvent:"Odmah na VENTILATION", back2:"Nazad", back3:"Nazad",
-    nivtitle:"Neinvazivna respiratorna potpora (NIV)", nivmode:"Mod NIV-a (auto-predlog, možeš promijeniti)",
+    startniv:"Kreni s NIV", jumpvent:"VENTILATION", back2:"Nazad", back3:"Nazad",
+    nivtitle:"Neinvazivna respiratorna potpora (NIV)", nivmode:"Mod NIV-a",
     manualentry:"Ručni unos trenutnih postavki", venttitle:"CONSIDER VENTILATION",
-    initsettings:"Početne postavke ventilatora (lung-protective)", manualvent:"Ručna korekcija postavki",
-    erready:"Zadovoljeni kriteriji za ekstubaciju (ERT)", settings:"Postavke", language:"Jezik",
-    units:"Jedinice", othercause:"OTHER CAUSE — isključi reverzibilne uzroke (opcionalno)",
-    skip:"Preskoči", abgtitle:"Arterijska/venska/kapilarna ABS", abgtype:"Tip uzorka",
-    surftitle:"ADD SURFACTANT", surfgiven:"Već sam samostalno dao surfaktant?", surftime:"Vrijeme doze (opcionalno)",
-    surfnote:"Bez unosa vremena app neće moći podsjetiti na redosiranje — možeš dodati vrijeme kasnije.",
-    extubtitle:"CONSIDER EXTUBATION", erdisc:"Ovo je informativni podsjetnik (ERT) — ne blokira potvrdu.",
-    therapytitle:"Terapija oko ekstubacije", disclaimer:"Ovaj alat je edukativna/klinička podrška. Ne zamjenjuje kliničku procjenu. Verzija za testiranje."
+    initsettings:"Postavke ventilatora", ettsummary:"ETT veličina i dubina", depthlabel:"Dubina oralno (cm)",
+    ettinfo:"Izračunato jednom prilikom otvaranja — informativno, uredi po potrebi.",
+    erready:"Minimalna respiratorna potpora — razmotri ekstubaciju",
+    settings:"Postavke", language:"Jezik", units:"Jedinice",
+    othercause:"OTHER CAUSE — isključi reverzibilne uzroke (opcionalno)",
+    abgtitle:"ABS", abgtype:"Tip uzorka", surftitle:"Surfaktant",
+    surfgiven:"Već sam samostalno dao surfaktant?", surftime:"Vrijeme doze (opcionalno)",
+    extubtitle:"CONSIDER EXTUBATION", erdisc:"Informativni podsjetnik (ERT) — ne blokira potvrdu.",
+    therapytitle:"Terapija oko ekstubacije",
+    disclaimer:"Ovaj alat je edukativna/klinička podrška. Ne zamjenjuje kliničku procjenu. Verzija za testiranje."
   },
   en: {
-    appTitle:"🫁 Resp Support Assistant", patients:"Patients", newname:"Full name (or fictional)",
+    appTitle:"Resp Support Assistant", patients:"Patients", newname:"Full name (or fictional)",
     addpatient:"New patient", selectunit:"Select unit", back:"Back", params:"Patient parameters",
     weight:"Weight (kg)", age:"Age (years)", height:"Height (cm) — optional",
     ga:"Gestational age (wk)", corrage:"Corrected age (wk) — informational", nweight:"Weight (g)",
-    startniv:"Start NIV", jumpvent:"Jump to VENTILATION", back2:"Back", back3:"Back",
-    nivtitle:"Non-invasive respiratory support (NIV)", nivmode:"NIV mode (auto-suggested, editable)",
+    startniv:"Start NIV", jumpvent:"VENTILATION", back2:"Back", back3:"Back",
+    nivtitle:"Non-invasive respiratory support (NIV)", nivmode:"NIV mode",
     manualentry:"Manual entry of current settings", venttitle:"CONSIDER VENTILATION",
-    initsettings:"Initial ventilator settings (lung-protective)", manualvent:"Manual override",
-    erready:"Extubation readiness criteria met (ERT)", settings:"Settings", language:"Language",
-    units:"Units", othercause:"OTHER CAUSE — rule out reversible causes (optional)",
-    skip:"Skip", abgtitle:"Arterial/venous/capillary blood gas", abgtype:"Sample type",
-    surftitle:"ADD SURFACTANT", surfgiven:"Already gave surfactant independently?", surftime:"Dose time (optional)",
-    surfnote:"Without a time entry the app can't remind you about redosing — you can add it later.",
-    extubtitle:"CONSIDER EXTUBATION", erdisc:"This is an informational reminder (ERT) — does not block confirmation.",
-    therapytitle:"Peri-extubation therapy", disclaimer:"This tool is educational/clinical decision support. Does not replace clinical judgment. Test build."
+    initsettings:"Ventilator settings", ettsummary:"ETT size and depth", depthlabel:"Oral depth (cm)",
+    ettinfo:"Calculated once on open — informational, edit as needed.",
+    erready:"Minimal respiratory support — consider extubation",
+    settings:"Settings", language:"Language", units:"Units",
+    othercause:"OTHER CAUSE — rule out reversible causes (optional)",
+    abgtitle:"ABG", abgtype:"Sample type", surftitle:"Surfactant",
+    surfgiven:"Already gave surfactant independently?", surftime:"Dose time (optional)",
+    extubtitle:"CONSIDER EXTUBATION", erdisc:"Informational reminder (ERT) — does not block confirmation.",
+    therapytitle:"Peri-extubation therapy",
+    disclaimer:"Educational/clinical decision support. Does not replace clinical judgment. Test build."
   }
 };
-
 function applyI18N(){
   const dict = I18N[STATE.lang];
   document.querySelectorAll('[id^="t-"]').forEach(el=>{
@@ -380,8 +379,6 @@ function showScreen(id){
     document.getElementById(s).classList.toggle('hidden', s!==id);
   });
 }
-
-/* ================= PATIENT LIST RENDER ================= */
 function renderPatients(){
   const list = document.getElementById('patientList');
   list.innerHTML = '';
@@ -390,20 +387,20 @@ function renderPatients(){
     div.className = 'patient-item' + (p.id===STATE.activePatientId?' active':'');
     div.innerHTML = `<span>${p.name} <span class="pill">${p.unit||'—'}</span></span>`;
     const delBtn = document.createElement('button');
-    delBtn.className='danger'; delBtn.textContent='✕';
+    delBtn.className='ghost'; delBtn.textContent='Delete';
     delBtn.onclick=(e)=>{e.stopPropagation(); STATE.patients=STATE.patients.filter(x=>x.id!==p.id); saveState(); renderPatients();};
     div.appendChild(delBtn);
     div.onclick=()=>{
       STATE.activePatientId = p.id;
       saveState();
-      if(!p.unit){ showScreen('screen-unit'); }
-      else if(Object.keys(p.params).length===0){ showScreen('screen-unit'); }
-      else { populateParamsScreen(); showScreen(p.nivStep>=0 && p.currentScreen==='vent' ? 'screen-vent' : (p.currentScreen==='niv'?'screen-niv':'screen-params')); if(p.currentScreen==='niv') renderNIV(); if(p.currentScreen==='vent') renderVent(); }
+      if(!p.unit || Object.keys(p.params).length===0){ showScreen('screen-unit'); }
+      else if(p.currentScreen==='vent'){ setupVentDefaults(p); showScreen('screen-vent'); renderVent(); }
+      else if(p.currentScreen==='niv'){ showScreen('screen-niv'); renderNIV(); }
+      else { populateParamsScreen(); showScreen('screen-params'); }
     };
     list.appendChild(div);
   });
 }
-
 document.getElementById('addPatientBtn').onclick = ()=>{
   const nameInput = document.getElementById('newPatientName');
   const name = nameInput.value.trim();
@@ -415,7 +412,6 @@ document.getElementById('addPatientBtn').onclick = ()=>{
   saveState(); renderPatients();
   showScreen('screen-unit');
 };
-
 document.getElementById('backToPatients').onclick = ()=>{showScreen('screen-patients'); renderPatients();};
 document.getElementById('backToUnit').onclick = ()=>{showScreen('screen-unit');};
 document.getElementById('backToParams').onclick = ()=>{showScreen('screen-params');};
@@ -430,7 +426,6 @@ function setupParamsScreen(){
   document.getElementById('nicuParams').classList.toggle('hidden', p.unit!=='NICU');
   showScreen('screen-params');
 }
-
 function populateParamsScreen(){
   const p = activePatient();
   setupParamsScreen();
@@ -444,34 +439,7 @@ function populateParamsScreen(){
     document.getElementById('n_weight').value = p.params.weight||'';
   }
 }
-
-/* ================= NIV LOGIC ================= */
-/* Standard starting NIV settings — PICU (by age band) and NICU (by weight) */
-function getPicuNivDefaults(age, weight){
-  // Age bands per common PICU/ESPNIC pediatric practice
-  if(age < 1) return {mode:'CPAP', PEEP:5, FiO2:0.4, IPAP:null, EPAP:5, flow:null};
-  if(age < 5) return {mode:'BiPAP', IPAP:10, EPAP:5, FiO2:0.4, RR_backup:20};
-  if(age < 12) return {mode:'BiPAP', IPAP:12, EPAP:6, FiO2:0.4, RR_backup:16};
-  return {mode:'BiPAP', IPAP:14, EPAP:6, FiO2:0.4, RR_backup:14};
-}
-function getNicuNivDefaults(ga, weightG){
-  // European Consensus RDS-style nCPAP starting settings
-  return {mode:'CPAP', PEEP:6, FiO2:0.3, flow: (weightG<1500? 6:8)};
-}
-
-const NIV_MAX = {
-  IPAP:20, EPAP:10, PEEP:10, FiO2:0.6, flow_HFNC_Lmin_per_kg:2 // approx max flow 2L/kg/min
-};
-const NIV_STEP = {IPAP:2, EPAP:1, PEEP:1, FiO2:0.1};
-
-function currentNivDefaults(p){
-  if(p.unit==='PICU') return getPicuNivDefaults(p.params.age, p.params.weight);
-  return getNicuNivDefaults(p.params.ga, p.params.weight);
-}
-
-document.getElementById('startNIVBtn').onclick = ()=>{
-  const p = activePatient();
-  // read params
+function readParamsFromForm(p){
   if(p.unit==='PICU'){
     p.params.weight = parseFloat(document.getElementById('p_weight').value)||null;
     p.params.age = parseFloat(document.getElementById('p_age').value)||null;
@@ -481,53 +449,86 @@ document.getElementById('startNIVBtn').onclick = ()=>{
     p.params.corrage = parseFloat(document.getElementById('n_corrage').value)||null;
     p.params.weight = parseFloat(document.getElementById('n_weight').value)||null;
   }
-  const defaults = currentNivDefaults(p);
-  p.nivMode = defaults.mode;
-  p.nivSettings = {...defaults};
-  p.nivStep = 0;
+}
+
+/* ================= NIV LOGIC ================= */
+function getPicuNivDefaults(age, weight){
+  if(age < 1) return {PEEP:5, FiO2:0.4};
+  if(age < 5) return {IPAP:10, EPAP:5, FiO2:0.4};
+  if(age < 12) return {IPAP:12, EPAP:6, FiO2:0.4};
+  return {IPAP:14, EPAP:6, FiO2:0.4};
+}
+function getNicuNivDefaults(ga, weightG){
+  return {PEEP:6, FiO2:0.3};
+}
+const NIV_MAX = {IPAP:20, EPAP:10, PEEP:10, FiO2:0.6};
+const NIV_MIN = {IPAP:6, EPAP:4, PEEP:4, FiO2:0.21};
+const NIV_STEP = {IPAP:2, EPAP:1, PEEP:1, FiO2:0.1};
+
+function defaultModeForPatient(p){
+  if(p.unit==='NICU') return 'CPAP';
+  if(p.params.age!=null && p.params.age < 1) return 'CPAP';
+  return 'BiPAP';
+}
+function currentNivDefaults(p){
+  return p.unit==='PICU' ? getPicuNivDefaults(p.params.age, p.params.weight) : getNicuNivDefaults(p.params.ga, p.params.weight);
+}
+function nivParamOrder(mode){
+  if(mode==='CPAP') return ['PEEP','FiO2'];
+  if(mode==='HFNC') return ['flow','FiO2'];
+  return ['IPAP','EPAP','FiO2'];
+}
+
+document.getElementById('startNIVBtn').onclick = ()=>{
+  const p = activePatient();
+  readParamsFromForm(p);
+  p.nivMode = defaultModeForPatient(p);
+  const d = currentNivDefaults(p);
+  if(p.nivMode==='CPAP') p.nivSettings = {PEEP:d.PEEP, FiO2:d.FiO2};
+  else p.nivSettings = {IPAP:d.IPAP||10, EPAP:d.EPAP||5, FiO2:d.FiO2};
+  p.nivAtMax = false;
   p.currentScreen = 'niv';
   saveState();
   showScreen('screen-niv');
   renderNIV();
 };
-
 document.getElementById('jumpVentBtn').onclick = ()=>{
   const p = activePatient();
-  if(p.unit==='PICU'){
-    p.params.weight = parseFloat(document.getElementById('p_weight').value)||null;
-    p.params.age = parseFloat(document.getElementById('p_age').value)||null;
-    p.params.height = parseFloat(document.getElementById('p_height').value)||null;
-  } else {
-    p.params.ga = parseFloat(document.getElementById('n_ga').value)||null;
-    p.params.corrage = parseFloat(document.getElementById('n_corrage').value)||null;
-    p.params.weight = parseFloat(document.getElementById('n_weight').value)||null;
-  }
+  readParamsFromForm(p);
   p.currentScreen = 'vent';
   saveState();
   setupVentDefaults(p);
   showScreen('screen-vent');
   renderVent();
 };
-
 document.getElementById('nivModeSelect').onchange = (e)=>{
   const p = activePatient();
   p.nivMode = e.target.value;
   const d = currentNivDefaults(p);
-  // translate settings loosely when switching mode
   if(p.nivMode==='CPAP'){ p.nivSettings = {PEEP:d.PEEP||6, FiO2:p.nivSettings.FiO2||d.FiO2}; }
-  if(p.nivMode==='HFNC'){ p.nivSettings = {flow:d.flow|| (p.params.weight? Math.round(p.params.weight*1.5):6), FiO2:p.nivSettings.FiO2||d.FiO2}; }
-  if(p.nivMode==='BiPAP'){ p.nivSettings = {IPAP:d.IPAP||10, EPAP:d.EPAP||5, FiO2:p.nivSettings.FiO2||d.FiO2, RR_backup:d.RR_backup||16}; }
+  if(p.nivMode==='HFNC'){ p.nivSettings = {flow:(p.params.weight? Math.round(p.params.weight*1.5):6), FiO2:p.nivSettings.FiO2||d.FiO2}; }
+  if(p.nivMode==='BiPAP'){ p.nivSettings = {IPAP:d.IPAP||10, EPAP:d.EPAP||5, FiO2:p.nivSettings.FiO2||d.FiO2}; }
+  p.nivAtMax = false;
   saveState();
   renderNIV();
 };
+
+function isNivAtMax(p){
+  const order = nivParamOrder(p.nivMode);
+  return order.every(k=>{
+    if(!(k in p.nivSettings)) return true;
+    const max = NIV_MAX[k];
+    if(max===undefined) return true;
+    return p.nivSettings[k] >= max;
+  });
+}
 
 function renderNIV(){
   const p = activePatient();
   document.getElementById('nivModeSelect').value = p.nivMode;
   const table = document.getElementById('nivParamTable');
   table.innerHTML = '';
-  const rows = Object.entries(p.nivSettings);
-  rows.forEach(([k,v])=>{
+  Object.entries(p.nivSettings).forEach(([k,v])=>{
     const tr = document.createElement('tr');
     tr.innerHTML = `<th>${k}</th><td>${v}${k==='FiO2'? ' ('+Math.round(v*100)+'%)':''}</td>`;
     table.appendChild(tr);
@@ -535,7 +536,6 @@ function renderNIV(){
   document.getElementById('nivGuidelineNote').textContent =
     (STATE.lang==='hr'? 'Predlog prema PEMVECC/ESPNIC (PICU) ili European Consensus RDS 7. izd. (NICU).':'Suggested per PEMVECC/ESPNIC (PICU) or European Consensus RDS 7th ed. (NICU).');
 
-  // manual entry fields
   const manualDiv = document.getElementById('manualNivFields');
   manualDiv.innerHTML = '';
   Object.keys(p.nivSettings).forEach(k=>{
@@ -543,9 +543,12 @@ function renderNIV(){
     wrap.innerHTML = `<label>${k}</label><input type="number" step="0.01" id="man_${k}" value="${p.nivSettings[k]}">`;
     manualDiv.appendChild(wrap);
   });
-  checkExtubationOrConsiderVent(p);
-}
 
+  p.nivAtMax = isNivAtMax(p);
+  document.getElementById('stillDyspnoicBtn').classList.toggle('hidden', p.nivAtMax);
+  document.getElementById('considerVentWrap').classList.toggle('hidden', !p.nivAtMax);
+  saveState();
+}
 document.getElementById('applyManualNiv').onclick = ()=>{
   const p = activePatient();
   Object.keys(p.nivSettings).forEach(k=>{
@@ -555,49 +558,28 @@ document.getElementById('applyManualNiv').onclick = ()=>{
   saveState(); renderNIV();
 };
 
-/* OTHER CAUSE checklist */
-const OTHER_CAUSES_HR = ['Pneumotoraks isključen','Kanila/ETT prohodna (nije začepljena)','Bronhospazam isključen/liječen',
-  'Bol/agitacija adekvatno zbrinuta','Veličina/pozicija maske adekvatna','Sekret aspiran/izmijenjen filter'];
-const OTHER_CAUSES_EN = ['Pneumothorax excluded','Cannula/ETT patent (not obstructed)','Bronchospasm excluded/treated',
-  'Pain/agitation adequately managed','Mask size/position adequate','Secretions suctioned/filter changed'];
+const OTHER_CAUSES_HR = ['Pneumotoraks isključen','Kanila/ETT prohodna','Bronhospazam isključen/liječen',
+  'Bol/agitacija zbrinuta','Veličina/pozicija maske adekvatna','Sekret aspiran/filter promijenjen'];
+const OTHER_CAUSES_EN = ['Pneumothorax excluded','Cannula/ETT patent','Bronchospasm excluded/treated',
+  'Pain/agitation managed','Mask size/position adequate','Secretions suctioned/filter changed'];
+let pendingAction = null;
 
-let pendingAction = null; // 'escalate' or 'deescalate'
+document.getElementById('stillDyspnoicBtn').onclick = ()=>{ pendingAction='escalate'; openOtherCauseModal(); };
+document.getElementById('eupnoicBtn').onclick = ()=>{ pendingAction='deescalate'; doNivStep(); };
 
-document.getElementById('stillDyspnoicBtn').onclick = ()=>{
-  pendingAction = 'escalate';
-  openOtherCauseModal();
-};
-document.getElementById('eupnoicBtn').onclick = ()=>{
-  pendingAction = 'deescalate';
-  openOtherCauseModal(true);
-};
-
-function openOtherCauseModal(skipChecklistDirectly){
-  if(skipChecklistDirectly){ doNivStep(); return; }
+function openOtherCauseModal(){
   const list = document.getElementById('otherCauseList');
   const items = STATE.lang==='hr'? OTHER_CAUSES_HR: OTHER_CAUSES_EN;
   list.innerHTML='';
-  items.forEach((txt,i)=>{
+  items.forEach(txt=>{
     const lab = document.createElement('label');
-    lab.innerHTML = `<input type="checkbox" data-idx="${i}"> ${txt}`;
+    lab.innerHTML = `<input type="checkbox"> ${txt}`;
     list.appendChild(lab);
   });
   document.getElementById('otherCauseModal').classList.remove('hidden');
 }
-document.getElementById('skipOtherCause').onclick = ()=>{
-  document.getElementById('otherCauseModal').classList.add('hidden');
-  doNivStep();
-};
-document.getElementById('confirmOtherCause').onclick = ()=>{
-  document.getElementById('otherCauseModal').classList.add('hidden');
-  doNivStep();
-};
-
-function nivParamOrder(mode){
-  if(mode==='CPAP') return ['PEEP','FiO2'];
-  if(mode==='HFNC') return ['flow','FiO2'];
-  return ['IPAP','EPAP','FiO2'];
-}
+document.getElementById('skipOtherCause').onclick = ()=>{ document.getElementById('otherCauseModal').classList.add('hidden'); doNivStep(); };
+document.getElementById('confirmOtherCause').onclick = ()=>{ document.getElementById('otherCauseModal').classList.add('hidden'); doNivStep(); };
 
 function doNivStep(){
   const p = activePatient();
@@ -607,35 +589,18 @@ function doNivStep(){
   for(const key of order){
     if(!(key in p.nivSettings)) continue;
     const step = NIV_STEP[key] || 0.1;
-    const max = NIV_MAX[key];
-    const min = key==='FiO2'? 0.21 : (key==='EPAP'||key==='PEEP'? 4 : 0);
-    let newVal = +(p.nivSettings[key] + dir*step).toFixed(2);
-    if(dir===1 && max!==undefined && p.nivSettings[key] >= max) continue; // already maxed on this param, try next
+    const max = NIV_MAX[key]; const min = NIV_MIN[key] ?? 0;
+    if(dir===1 && p.nivSettings[key] >= max) continue;
     if(dir===-1 && p.nivSettings[key] <= min) continue;
-    if(dir===1) newVal = Math.min(newVal, max===undefined?newVal:max);
+    let newVal = +(p.nivSettings[key] + dir*step).toFixed(2);
+    if(dir===1) newVal = Math.min(newVal, max);
     if(dir===-1) newVal = Math.max(newVal, min);
     p.nivSettings[key] = newVal;
     changed = true;
-    break; // escalate/deescalate one parameter per step per protocol convention (FiO2 first? -> we escalate primary support param first for BiPAP, then FiO2)
-  }
-  if(!changed && dir===1){
-    // fully at NIV max -> prompt ventilation
-    saveState();
-    alert(STATE.lang==='hr'? 'Dosegnut je maksimum NIV potpore prema smjernicama. Razmotri CONSIDER VENTILATION.':'Maximum NIV support reached per guidelines. Consider CONSIDER VENTILATION.');
+    break;
   }
   saveState();
   renderNIV();
-}
-
-function checkExtubationOrConsiderVent(p){
-  // NICU surfactant reminder trigger
-  if(p.unit==='NICU' && p.nivMode==='CPAP'){
-    const fio2 = p.nivSettings.FiO2;
-    const peep = p.nivSettings.PEEP;
-    if(fio2>0.3 && peep>=6){
-      // informational only; handled in vent screen / surf modal when opened
-    }
-  }
 }
 
 document.getElementById('considerVentBtn').onclick = ()=>{
@@ -649,14 +614,10 @@ document.getElementById('considerVentBtn').onclick = ()=>{
 
 /* ================= VENTILATION LOGIC ================= */
 function coleETT(ageYears){
-  // Cole formula, valid age >= 1yr; for <1yr use standard neonatal/infant table
-  if(ageYears==null) return null;
-  if(ageYears < 1){
-    return {id: 3.5, depthOral: 10.5}; // generic infant fallback
-  }
+  if(ageYears==null) return {id:3.5, depthOral:10.5};
+  if(ageYears < 1) return {id:3.5, depthOral:10.5};
   const id = +(ageYears/4 + 4).toFixed(1);
-  const depth = +(id*3).toFixed(1);
-  return {id, depthOral: depth};
+  return {id, depthOral: +(id*3).toFixed(1)};
 }
 function nicuETT(weightG){
   if(weightG < 1000) return {id:2.5, depthOral:6};
@@ -664,87 +625,110 @@ function nicuETT(weightG){
   if(weightG < 3000) return {id:3.5, depthOral:8};
   return {id:3.5, depthOral:9};
 }
-
 function initialVentSettings(p){
   if(p.unit==='PICU'){
     const w = p.params.weight || 10;
-    return {
-      mode:'PC-SIMV', PIP:18, PEEP:6, RR: p.params.age<1?30:(p.params.age<5?24:18),
-      Ti: p.params.age<1?0.5:0.7, FiO2:0.4, Vt_target: +(w*6).toFixed(0)+' mL (6 mL/kg IBW)'
-    };
+    return { mode:'PC-SIMV', PIP:18, PEEP:6, RR: p.params.age<1?30:(p.params.age<5?24:18),
+      Ti: p.params.age<1?0.5:0.7, FiO2:0.4 };
   } else {
-    const w = p.params.weight || 1000;
-    return {
-      mode:'PC-SIMV (neonatal)', PIP:16, PEEP:5, RR:40, Ti:0.35, FiO2:0.3,
-      Vt_target: +((w/1000)*5).toFixed(1)+' mL (~4-6 mL/kg)'
-    };
+    return { mode:'PC-SIMV (neonatal)', PIP:16, PEEP:5, RR:40, Ti:0.35, FiO2:0.3 };
   }
 }
-
 function setupVentDefaults(p){
   if(!p.ettSize){
-    if(p.unit==='PICU'){
-      const ett = coleETT(p.params.age);
-      p.ettSize = ett?.id; p.ettDepth = ett?.depthOral;
-    } else {
-      const ett = nicuETT(p.params.weight||1500);
-      p.ettSize = ett.id; p.ettDepth = ett.depthOral;
-    }
+    const ett = p.unit==='PICU' ? coleETT(p.params.age) : nicuETT(p.params.weight||1500);
+    p.ettSize = ett.id; p.ettDepth = ett.depthOral;
   }
   if(Object.keys(p.ventSettings).length===0){
     p.ventSettings = initialVentSettings(p);
+    p.ventBaseline = {...p.ventSettings};
   }
   saveState();
 }
 
+const numericVentKeys = ['PIP','PEEP','RR','Ti','FiO2'];
+
 function renderVent(){
   const p = activePatient();
-  const ettTable = document.getElementById('ettTable');
-  ettTable.innerHTML = `
-    <tr><th>ETT ID (mm)</th><td><input type="number" step="0.1" id="ettIdInput" value="${p.ettSize}" style="width:80px"></td></tr>
-    <tr><th>${STATE.lang==='hr'?'Dubina oralno (cm)':'Oral depth (cm)'}</th><td><input type="number" step="0.1" id="ettDepthInput" value="${p.ettDepth}" style="width:80px"></td></tr>
-  `;
+  document.getElementById('ettIdInput').value = p.ettSize;
+  document.getElementById('ettDepthInput').value = p.ettDepth;
   document.getElementById('ettIdInput').onchange = (e)=>{p.ettSize=parseFloat(e.target.value); saveState();};
   document.getElementById('ettDepthInput').onchange = (e)=>{p.ettDepth=parseFloat(e.target.value); saveState();};
 
   const vt = document.getElementById('ventParamTable');
   vt.innerHTML = '';
-  Object.entries(p.ventSettings).forEach(([k,v])=>{
+  const modeTr = document.createElement('tr');
+  modeTr.innerHTML = `<th>mode</th><td><input type="text" id="vf_mode" value="${p.ventSettings.mode||''}"></td>`;
+  vt.appendChild(modeTr);
+  numericVentKeys.forEach(k=>{
+    if(!(k in p.ventSettings)) return;
     const tr = document.createElement('tr');
-    tr.innerHTML = `<th>${k}</th><td>${v}</td>`;
+    const isEsc = p.ventEscalated && p.ventEscalated[k];
+    tr.innerHTML = `<th>${k}</th><td><input type="number" step="0.1" class="${isEsc?'escalated':''}" id="vf_${k}" value="${p.ventSettings[k]}"></td>`;
     vt.appendChild(tr);
   });
 
-  const manualDiv = document.getElementById('manualVentFields');
-  manualDiv.innerHTML = '';
-  Object.keys(p.ventSettings).forEach(k=>{
-    if(typeof p.ventSettings[k] !== 'number') return;
-    const wrap = document.createElement('div'); wrap.className='field'; wrap.style.marginBottom='6px';
-    wrap.innerHTML = `<label>${k}</label><input type="number" step="0.1" id="vman_${k}" value="${p.ventSettings[k]}">`;
-    manualDiv.appendChild(wrap);
-  });
-
-  // extubation readiness check (simplified ERT)
+  updateSurfGroup(p);
   const ready = p.ventSettings.PEEP<=8 && p.ventSettings.FiO2<=0.5 && (p.ventSettings.PIP||99)<26;
   document.getElementById('extubationBanner').classList.toggle('hidden', !ready);
+  renderAbgHistory(p);
 }
 
-document.getElementById('applyManualVent').onclick = ()=>{
+document.getElementById('saveVentBtn').onclick = ()=>{
   const p = activePatient();
-  Object.keys(p.ventSettings).forEach(k=>{
-    const el = document.getElementById('vman_'+k);
+  p.ventSettings.mode = document.getElementById('vf_mode').value;
+  numericVentKeys.forEach(k=>{
+    const el = document.getElementById('vf_'+k);
     if(el) p.ventSettings[k] = parseFloat(el.value);
   });
-  saveState(); renderVent();
+  p.ventBaseline = {...p.ventSettings};
+  p.ventEscalated = {};
+  saveState();
+  renderVent();
 };
 
-/* ================= ABG LOGIC (ARDSNet-adapted) ================= */
-document.getElementById('openABGBtn').onclick = ()=>{
-  document.getElementById('abgModal').classList.remove('hidden');
-  document.getElementById('abgSuggestion').textContent='';
+document.getElementById('escalationBtn').onclick = ()=>{
+  const p = activePatient();
+  const before = {...p.ventSettings};
+  p.ventSettings.PEEP = (p.ventSettings.PEEP||6) + 1;
+  p.ventSettings.PIP = (p.ventSettings.PIP||18) + 2;
+  p.ventSettings.FiO2 = Math.min(1, +(p.ventSettings.FiO2||0.4) + 0.1);
+  if(p.unit==='PICU') p.ventSettings.RR = (p.ventSettings.RR||20) + 2;
+  p.ventEscalated = {};
+  Object.keys(p.ventSettings).forEach(k=>{
+    if(numericVentKeys.includes(k) && p.ventSettings[k] !== before[k]) p.ventEscalated[k] = true;
+  });
+  saveState();
+  renderVent();
 };
-document.getElementById('cancelABG').onclick = ()=>document.getElementById('abgModal').classList.add('hidden');
 
+/* ================= SURFACTANT ================= */
+function updateSurfGroup(p){
+  const group = document.getElementById('surfGroup');
+  group.classList.toggle('hidden', p.unit!=='NICU');
+  if(p.unit!=='NICU') return;
+  const fio2 = Math.max(p.nivSettings.FiO2||0, p.ventSettings.FiO2||0);
+  const peep = Math.max(p.nivSettings.PEEP||0, p.ventSettings.PEEP||0);
+  const needed = fio2 > 0.3 && peep >= 6;
+  group.classList.toggle('alert', needed);
+  const rec = document.getElementById('surfRecommendation');
+  rec.textContent = needed ?
+    (STATE.lang==='hr'? 'Prag zadovoljen: FiO2>0.30 na CPAP/PEEP≥6 cmH2O → razmotri (re)doziranje surfaktanta.':'Threshold met: FiO2>0.30 on CPAP/PEEP≥6 → consider surfactant (re)dosing.') :
+    (STATE.lang==='hr'? 'Prag za surfaktant trenutno nije zadovoljen.':'Surfactant threshold currently not met.');
+}
+document.getElementById('surfGivenSelect').onchange = (e)=>{
+  document.getElementById('surfTimeFields').classList.toggle('hidden', e.target.value!=='yes');
+};
+document.getElementById('saveSurf').onclick = ()=>{
+  const p = activePatient();
+  const given = document.getElementById('surfGivenSelect').value === 'yes';
+  const time = document.getElementById('surfTime').value || null;
+  p.surfactant = {given, time};
+  saveState();
+  document.getElementById('surfGroup').removeAttribute('open');
+};
+
+/* ================= ABG LOGIC ================= */
 document.getElementById('applyABG').onclick = ()=>{
   const p = activePatient();
   const type = document.getElementById('abgType').value;
@@ -754,65 +738,39 @@ document.getElementById('applyABG').onclick = ()=>{
   const be = parseFloat(document.getElementById('abgBE').value);
   const hco3 = parseFloat(document.getElementById('abgHCO3').value);
 
-  let msgs = [];
-  // Oxygenation adjustment (ARDSNet PEEP/FiO2 ladder) — only if arterial/capillary and pO2 available
+  const before = {...p.ventSettings};
   if(type!=='venous' && !isNaN(po2)){
-    if(po2 < 8){ // kPa ~ 60 mmHg
-      p.ventSettings.PEEP = (p.ventSettings.PEEP||6) + 2;
-      p.ventSettings.FiO2 = Math.min(1, (p.ventSettings.FiO2||0.4) + 0.1);
-      msgs.push(STATE.lang==='hr'? 'Hipoksemija → PEEP +2, FiO2 +10% (ARDSNet ladder).':'Hypoxemia → PEEP +2, FiO2 +10% (ARDSNet ladder).');
-    } else if(po2 > 13){
-      p.ventSettings.FiO2 = Math.max(0.21, (p.ventSettings.FiO2||0.4) - 0.1);
-      msgs.push(STATE.lang==='hr'? 'Hiperoksija → FiO2 -10%.':'Hyperoxia → FiO2 -10%.');
-    }
+    if(po2 < 8){ p.ventSettings.PEEP = (p.ventSettings.PEEP||6)+2; p.ventSettings.FiO2 = Math.min(1,(p.ventSettings.FiO2||0.4)+0.1); }
+    else if(po2 > 13){ p.ventSettings.FiO2 = Math.max(0.21,(p.ventSettings.FiO2||0.4)-0.1); }
   }
-  // Ventilation (CO2/pH) adjustment
   if(!isNaN(pco2) && !isNaN(ph)){
-    if(ph < 7.25 && pco2 > 6.5){
-      p.ventSettings.RR = (p.ventSettings.RR||20) + 4;
-      p.ventSettings.PIP = (p.ventSettings.PIP||18) + 2;
-      msgs.push(STATE.lang==='hr'? 'Respiratorna acidoza → RR +4, PIP/Vt +2 (uz oprez plateau ≤28-32 cmH2O).':'Respiratory acidosis → RR +4, PIP/Vt +2 (watch plateau ≤28-32 cmH2O).');
-    } else if(ph > 7.45 && pco2 < 4.5){
-      p.ventSettings.RR = Math.max(10, (p.ventSettings.RR||20) - 2);
-      msgs.push(STATE.lang==='hr'? 'Respiratorna alkaloza → RR -2.':'Respiratory alkalosis → RR -2.');
-    }
+    if(ph < 7.25 && pco2 > 6.5){ p.ventSettings.RR = (p.ventSettings.RR||20)+4; p.ventSettings.PIP = (p.ventSettings.PIP||18)+2; }
+    else if(ph > 7.45 && pco2 < 4.5){ p.ventSettings.RR = Math.max(10,(p.ventSettings.RR||20)-2); }
   }
-  if(type==='venous'){
-    msgs.push(STATE.lang==='hr'? 'Venski uzorak: oksigenacijske preporuke ignorirane, korekcija samo prema pCO2/pH/BE.':'Venous sample: oxygenation suggestions ignored, correction based on pCO2/pH/BE only.');
-  }
-  document.getElementById('abgSuggestion').textContent = msgs.join(' ') || (STATE.lang==='hr'?'Vrijednosti u granicama, bez promjene.':'Values within range, no change.');
-  p.abgHistory.push({type,ph,po2,pco2,be,hco3, at:new Date().toISOString()});
+  p.ventEscalated = {};
+  Object.keys(p.ventSettings).forEach(k=>{
+    if(numericVentKeys.includes(k) && p.ventSettings[k] !== before[k]) p.ventEscalated[k] = true;
+  });
+
+  if(!p.abgHistory) p.abgHistory = [];
+  p.abgHistory.push({n:p.abgHistory.length+1, type, ph, po2, pco2, be, hco3, at:new Date().toISOString()});
+  document.getElementById('abgPH').value=''; document.getElementById('abgPO2').value='';
+  document.getElementById('abgPCO2').value=''; document.getElementById('abgBE').value=''; document.getElementById('abgHCO3').value='';
   saveState();
   renderVent();
 };
-
-/* ================= SURFACTANT ================= */
-document.getElementById('addSurfactantBtn').onclick = ()=>{
-  const p = activePatient();
-  const rec = document.getElementById('surfRecommendation');
-  const fio2 = (p.nivSettings.FiO2 ?? p.ventSettings.FiO2 ?? 0);
-  const peep = (p.nivSettings.PEEP ?? p.ventSettings.PEEP ?? 0);
-  if(fio2 > 0.3 && peep >= 6){
-    rec.textContent = STATE.lang==='hr'?
-      'Prag zadovoljen: FiO2>0.30 na CPAP≥6 cmH2O → razmotri (re)doziranje surfaktanta (European Consensus RDS).':
-      'Threshold met: FiO2>0.30 on CPAP≥6 cmH2O → consider surfactant (re)dosing (European Consensus RDS).';
-  } else {
-    rec.textContent = STATE.lang==='hr'? 'Prag za surfaktant trenutno nije zadovoljen — ovo je samo podsjetnik.':'Surfactant threshold currently not met — informational only.';
-  }
-  document.getElementById('surfModal').classList.remove('hidden');
-};
-document.getElementById('surfGivenSelect').onchange = (e)=>{
-  document.getElementById('surfTimeFields').classList.toggle('hidden', e.target.value!=='yes');
-};
-document.getElementById('cancelSurf').onclick = ()=>document.getElementById('surfModal').classList.add('hidden');
-document.getElementById('saveSurf').onclick = ()=>{
-  const p = activePatient();
-  const given = document.getElementById('surfGivenSelect').value === 'yes';
-  const time = document.getElementById('surfTime').value || null;
-  p.surfactant = {given, time};
-  saveState();
-  document.getElementById('surfModal').classList.add('hidden');
-};
+function renderAbgHistory(p){
+  const wrap = document.getElementById('abgHistoryList');
+  wrap.innerHTML = '';
+  (p.abgHistory||[]).slice().reverse().forEach(entry=>{
+    const div = document.createElement('div');
+    div.className = 'abg-entry';
+    div.innerHTML = `<div class="row-line"><span>ABS #${entry.n} — ${entry.type}</span><span class="small">${new Date(entry.at).toLocaleTimeString()}</span></div>
+      <div class="abg-detail">pH ${entry.ph ?? '-'} · pO2 ${entry.po2 ?? '-'} · pCO2 ${entry.pco2 ?? '-'} · BE ${entry.be ?? '-'} · HCO3 ${entry.hco3 ?? '-'}</div>`;
+    div.onclick = ()=> div.classList.toggle('open');
+    wrap.appendChild(div);
+  });
+}
 
 /* ================= EXTUBATION ================= */
 const ERT_HR = ['Temp > 35.5°C','Bez rezidualne neuromuskularne blokade','Hemodinamski stabilan za dob',
@@ -824,11 +782,7 @@ document.getElementById('considerExtubBtn').onclick = ()=>{
   const list = document.getElementById('ertChecklist');
   const items = STATE.lang==='hr'? ERT_HR: ERT_EN;
   list.innerHTML='';
-  items.forEach(txt=>{
-    const lab = document.createElement('label');
-    lab.innerHTML = `<input type="checkbox"> ${txt}`;
-    list.appendChild(lab);
-  });
+  items.forEach(txt=>{ const lab=document.createElement('label'); lab.innerHTML=`<input type="checkbox"> ${txt}`; list.appendChild(lab); });
   document.getElementById('extubModal').classList.remove('hidden');
 };
 document.getElementById('cancelExtub').onclick = ()=>document.getElementById('extubModal').classList.add('hidden');
@@ -836,16 +790,14 @@ document.getElementById('confirmExtub').onclick = ()=>{
   document.getElementById('extubModal').classList.add('hidden');
   showExtubationTherapy();
 };
-
 function showExtubationTherapy(){
   const p = activePatient();
-  const w = p.params.weight || (p.unit==='NICU' ? (p.params.weight||1500)/1000 : 10);
   const weightKg = p.unit==='NICU' ? (p.params.weight||1500)/1000 : (p.params.weight||10);
   const dexDose = Math.min(10, +(weightKg*0.5).toFixed(2));
   const table = document.getElementById('therapyTable');
   table.innerHTML = `
-    <tr><th>${STATE.lang==='hr'?'Deksametazon (IV)':'Dexamethasone (IV)'}</th><td>${dexDose} mg (0.5 mg/kg, max 10 mg) — 1. doza 12-24h prije ekstubacije, zatim q6h do 6 doza ukupno</td></tr>
-    <tr><th>${STATE.lang==='hr'?'L-epinefrin (nebulizirano)':'L-epinephrine (nebulized)'}</th><td>${STATE.lang==='hr'?'5 mL 1:1000 nebulizirano (ekvivalentno racemičnom, širre dostupno)':'5 mL 1:1000 nebulized (equivalent to racemic, wider availability)'} <br><span class="small">${STATE.lang==='hr'?'Alternativa: racemični epinefrin 0.5 mL 2.25% u 2.5 mL NaCl':'Alternative: racemic epinephrine 0.5 mL 2.25% in 2.5 mL saline'}</span></td></tr>
+    <tr><th>${STATE.lang==='hr'?'Deksametazon (IV)':'Dexamethasone (IV)'}</th><td>${dexDose} mg (0.5 mg/kg, max 10 mg)</td></tr>
+    <tr><th>${STATE.lang==='hr'?'L-epinefrin (neb.)':'L-epinephrine (neb.)'}</th><td>5 mL 1:1000</td></tr>
   `;
   document.getElementById('extubTherapyModal').classList.remove('hidden');
 }
@@ -856,8 +808,7 @@ document.getElementById('settingsBtn').onclick = ()=>document.getElementById('se
 document.getElementById('closeSettings').onclick = ()=>{
   STATE.lang = document.getElementById('langSelect').value;
   STATE.units = document.getElementById('unitSelect').value;
-  saveState();
-  applyI18N();
+  saveState(); applyI18N();
   document.getElementById('settingsModal').classList.add('hidden');
 };
 
